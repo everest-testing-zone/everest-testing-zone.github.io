@@ -1,9 +1,9 @@
 {
   "versions": [
-    "latest",
     "nightly",
     "nightly_",
     "old-documentation-2025",
+    "release_2042_04_2_",
     "something42_"
   ]
 }
