@@ -1,11 +1,39 @@
 {
   "versions": [
-    "docstestbuild",
-    "latest",
-    "nightly",
-    "nightly_",
-    "old-documentation-2025",
-    "release_2042_04_2_",
-    "something42_"
+    {
+      "name": "docstestbuild",
+      "display": "docstestbuild",
+      "is_release": false
+    },
+    {
+      "name": "latest",
+      "display": "latest",
+      "is_release": false
+    },
+    {
+      "name": "nightly",
+      "display": "nightly (main)",
+      "is_release": false
+    },
+    {
+      "name": "nightly_",
+      "display": "nightly_",
+      "is_release": false
+    },
+    {
+      "name": "old-documentation-2025",
+      "display": "old-documentation-2025",
+      "is_release": false
+    },
+    {
+      "name": "release_2042_04_2_",
+      "display": "release_2042_04_2_",
+      "is_release": false
+    },
+    {
+      "name": "something42_",
+      "display": "something42_",
+      "is_release": false
+    }
   ]
 }
