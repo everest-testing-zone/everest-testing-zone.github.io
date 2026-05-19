@@ -1,6 +1,11 @@
 {
   "versions": [
     {
+      "name": "a_manual_build",
+      "display": "A Manual Build",
+      "is_release": false
+    },
+    {
       "name": "docstestbuild",
       "display": "docstestbuild",
       "is_release": false
