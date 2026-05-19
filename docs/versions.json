@@ -1,5 +1,6 @@
 {
   "versions": [
+    "docstestbuild",
     "latest",
     "nightly",
     "nightly_",
