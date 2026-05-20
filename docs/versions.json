@@ -1,6 +1,11 @@
 {
   "versions": [
     {
+      "name": "release_2042_04_2_",
+      "display": "release_2042_04_2_",
+      "is_release": true
+    },
+    {
       "name": "a_manual_build",
       "display": "A Manual Build",
       "is_release": false
@@ -28,11 +33,6 @@
     {
       "name": "old-documentation-2025",
       "display": "old-documentation-2025",
-      "is_release": false
-    },
-    {
-      "name": "release_2042_04_2_",
-      "display": "release_2042_04_2_",
       "is_release": false
     },
     {
