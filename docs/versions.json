@@ -26,11 +26,6 @@
       "is_release": false
     },
     {
-      "name": "nightly_",
-      "display": "nightly_",
-      "is_release": false
-    },
-    {
       "name": "old-documentation-2025",
       "display": "old-documentation-2025",
       "is_release": false
