@@ -12,21 +12,19 @@
         and renders the list dynamically, so the page never goes stale when an
         instance is added or removed.
 
-        Styling reuses Furo's stylesheet from /latest/ — assumes at least one
-        release has been deployed. Falls back to system styling otherwise.
+        Reuses Furo's scaffold and stylesheet from /latest/ — assumes at least
+        one release has been deployed. The sidebar shows only the brand/logo
+        (no TOC, since this page is not part of any particular version).
     -->
     <link rel="icon" href="/latest/_static/favicon.png">
     <link rel="stylesheet" href="/latest/_static/styles/furo.css">
     <link rel="stylesheet" href="/latest/_static/styles/furo-extensions.css">
     <style>
-        /* Furo's stylesheet assumes a sidebar+TOC layout that doesn't make
-         * sense for a multiversion landing page. Reset to a centered column. */
-        body { margin: 0; }
-        .versions-page {
-            max-width: 60rem;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-        }
+        /* This page has no per-version TOC; hide Furo's right-hand drawer
+         * entirely and let the content occupy the freed width. */
+        .toc-drawer,
+        .toc-sticky { display: none !important; }
+
         ul.versions-list { list-style: none; padding: 0; margin: 1.5em 0; }
         ul.versions-list li {
             padding: 0.6em 0;
@@ -46,54 +44,80 @@
     </style>
 </head>
 <body>
-    <main class="versions-page">
-        <h1>Documentation Versions</h1>
-        <p>Pick a version of the documentation to view.</p>
-        <ul class="versions-list" id="versions-list">
-            <li class="placeholder">Loading&hellip;</li>
-        </ul>
-        <noscript>
-            <p>JavaScript is required to render the list of available versions.
-               You can browse <a href="/latest/">/latest/</a> directly.</p>
-        </noscript>
-    </main>
-    <script>
-        (function () {
-            fetch('/versions.json')
-                .then(function (r) {
-                    if (!r.ok) throw new Error('HTTP ' + r.status);
-                    return r.json();
-                })
-                .then(function (data) {
-                    var list = document.getElementById('versions-list');
-                    var versions = (data && data.versions) || [];
-                    list.innerHTML = '';
-                    if (versions.length === 0) {
-                        var li = document.createElement('li');
-                        li.className = 'placeholder';
-                        li.textContent = 'No versions deployed yet.';
-                        list.appendChild(li);
-                        return;
-                    }
-                    versions.forEach(function (entry) {
-                        var isObject = entry !== null && typeof entry === 'object';
-                        var name = isObject ? entry.name : entry;
-                        var display = isObject ? (entry.display || entry.name) : entry;
-                        var li = document.createElement('li');
-                        var a = document.createElement('a');
-                        a.href = '/' + name + '/index.html';
-                        a.textContent = display;
-                        li.appendChild(a);
-                        list.appendChild(li);
-                    });
-                })
-                .catch(function (err) {
-                    var list = document.getElementById('versions-list');
-                    list.innerHTML =
-                        '<li class="error">Failed to load version list.</li>';
-                    console.error('versions_index: failed to load /versions.json', err);
+<script>
+    // Match Furo's behaviour: respect the user's saved theme preference.
+    document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+</script>
+<div class="page">
+    <aside class="sidebar-drawer">
+        <div class="sidebar-container">
+            <div class="sidebar-sticky">
+                <a class="sidebar-brand" href="/latest/">
+                    <div class="sidebar-logo-container">
+                        <img class="sidebar-logo"
+                             src="/latest/_static/everest_icon-color.png"
+                             alt="EVerest">
+                    </div>
+                    <span class="sidebar-brand-text">EVerest Documentation</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+    <div class="main">
+        <div class="content">
+            <div class="article-container">
+                <article role="main">
+                    <h1>Documentation Versions</h1>
+                    <p>Pick a version of the documentation to view.</p>
+                    <ul class="versions-list" id="versions-list">
+                        <li class="placeholder">Loading&hellip;</li>
+                    </ul>
+                    <noscript>
+                        <p>JavaScript is required to render the list of available versions.
+                           You can browse <a href="/latest/">/latest/</a> directly.</p>
+                    </noscript>
+                </article>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    (function () {
+        fetch('/versions.json')
+            .then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
+            .then(function (data) {
+                var list = document.getElementById('versions-list');
+                var versions = (data && data.versions) || [];
+                list.innerHTML = '';
+                if (versions.length === 0) {
+                    var li = document.createElement('li');
+                    li.className = 'placeholder';
+                    li.textContent = 'No versions deployed yet.';
+                    list.appendChild(li);
+                    return;
+                }
+                versions.forEach(function (entry) {
+                    var isObject = entry !== null && typeof entry === 'object';
+                    var name = isObject ? entry.name : entry;
+                    var display = isObject ? (entry.display || entry.name) : entry;
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    a.href = '/' + name + '/index.html';
+                    a.textContent = display;
+                    li.appendChild(a);
+                    list.appendChild(li);
                 });
-        })();
-    </script>
+            })
+            .catch(function (err) {
+                var list = document.getElementById('versions-list');
+                list.innerHTML =
+                    '<li class="error">Failed to load version list.</li>';
+                console.error('versions_index: failed to load /versions.json', err);
+            });
+    })();
+</script>
 </body>
 </html>
