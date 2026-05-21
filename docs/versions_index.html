@@ -25,7 +25,7 @@
         .toc-drawer,
         .toc-sticky { display: none !important; }
 
-        ul.versions-list { list-style: none; padding: 0; margin: 1.5em 0; }
+        ul.versions-list { list-style: none; padding: 0; margin: 0.5em 0 1.5em; }
         ul.versions-list li {
             padding: 0.6em 0;
             border-bottom: 1px solid var(--color-background-border, #e1e4e5);
@@ -44,11 +44,19 @@
             content: "→ ";
             color: var(--color-foreground-muted, #999);
         }
-        ul.versions-list li.placeholder,
-        ul.versions-list li.error {
+        .versions-section-heading {
+            margin-top: 2em;
+            margin-bottom: 0.25em;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-foreground-secondary, #666);
+        }
+        .placeholder,
+        .error {
             color: var(--color-foreground-secondary, #777);
             font-style: italic;
-            border-bottom: none;
         }
     </style>
 </head>
@@ -78,9 +86,9 @@
                 <article role="main">
                     <h1>Documentation Versions</h1>
                     <p>Pick a version of the documentation to view.</p>
-                    <ul class="versions-list" id="versions-list">
-                        <li class="placeholder">Loading&hellip;</li>
-                    </ul>
+                    <div id="versions-container">
+                        <p class="placeholder">Loading&hellip;</p>
+                    </div>
                     <noscript>
                         <p>JavaScript is required to render the list of available versions.
                            You can browse <a href="/latest/">/latest/</a> directly.</p>
@@ -92,47 +100,76 @@
 </div>
 <script>
     (function () {
+        var container = document.getElementById('versions-container');
+
+        function makeListItem(entry) {
+            var li = document.createElement('li');
+
+            var versionLink = document.createElement('a');
+            versionLink.className = 'version-link';
+            versionLink.href = '/' + entry.name + '/index.html';
+            versionLink.textContent = entry.display || entry.name;
+            li.appendChild(versionLink);
+
+            var snapshotLink = document.createElement('a');
+            snapshotLink.className = 'snapshot-link';
+            snapshotLink.href = '/' + entry.name + '/reference/snapshot.html';
+            snapshotLink.textContent = 'snapshot.yaml';
+            li.appendChild(snapshotLink);
+
+            return li;
+        }
+
+        function appendSection(headingText, entries) {
+            if (entries.length === 0) return;
+            if (headingText) {
+                var h = document.createElement('h2');
+                h.className = 'versions-section-heading';
+                h.textContent = headingText;
+                container.appendChild(h);
+            }
+            var ul = document.createElement('ul');
+            ul.className = 'versions-list';
+            entries.forEach(function (e) {
+                ul.appendChild(makeListItem(e));
+            });
+            container.appendChild(ul);
+        }
+
         fetch('/versions.json')
             .then(function (r) {
                 if (!r.ok) throw new Error('HTTP ' + r.status);
                 return r.json();
             })
             .then(function (data) {
-                var list = document.getElementById('versions-list');
                 var versions = (data && data.versions) || [];
-                list.innerHTML = '';
+                container.innerHTML = '';
+
                 if (versions.length === 0) {
-                    var li = document.createElement('li');
-                    li.className = 'placeholder';
-                    li.textContent = 'No versions deployed yet.';
-                    list.appendChild(li);
+                    container.innerHTML =
+                        '<p class="placeholder">No versions deployed yet.</p>';
                     return;
                 }
-                versions.forEach(function (entry) {
-                    var isObject = entry !== null && typeof entry === 'object';
-                    var name = isObject ? entry.name : entry;
-                    var display = isObject ? (entry.display || entry.name) : entry;
-                    var li = document.createElement('li');
 
-                    var versionLink = document.createElement('a');
-                    versionLink.className = 'version-link';
-                    versionLink.href = '/' + name + '/index.html';
-                    versionLink.textContent = display;
-                    li.appendChild(versionLink);
-
-                    var snapshotLink = document.createElement('a');
-                    snapshotLink.className = 'snapshot-link';
-                    snapshotLink.href = '/' + name + '/reference/snapshot.html';
-                    snapshotLink.textContent = 'snapshot.yaml';
-                    li.appendChild(snapshotLink);
-
-                    list.appendChild(li);
+                // Within each group we render entries in the order delivered
+                // by versions.json — the aggregator (create_metadata_file.py)
+                // already sorts releases newest-first.
+                var nightly = [];
+                var releases = [];
+                var others = [];
+                versions.forEach(function (e) {
+                    if (e.name === 'nightly') nightly.push(e);
+                    else if (e.is_release) releases.push(e);
+                    else others.push(e);
                 });
+
+                appendSection('',         nightly);
+                appendSection('Releases', releases);
+                appendSection('Other',    others);
             })
             .catch(function (err) {
-                var list = document.getElementById('versions-list');
-                list.innerHTML =
-                    '<li class="error">Failed to load version list.</li>';
+                container.innerHTML =
+                    '<p class="error">Failed to load version list.</p>';
                 console.error('versions_index: failed to load /versions.json', err);
             });
     })();
