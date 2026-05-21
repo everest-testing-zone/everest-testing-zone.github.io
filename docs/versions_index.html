@@ -30,11 +30,20 @@
             padding: 0.6em 0;
             border-bottom: 1px solid var(--color-background-border, #e1e4e5);
         }
-        ul.versions-list li a {
+        ul.versions-list li a.version-link {
             font-size: 1.1em;
             text-decoration: none;
         }
         ul.versions-list li a:hover { text-decoration: underline; }
+        ul.versions-list li .snapshot-link {
+            margin-left: 0.75em;
+            font-size: 0.9em;
+            color: var(--color-foreground-secondary, #555);
+        }
+        ul.versions-list li .snapshot-link::before {
+            content: "→ ";
+            color: var(--color-foreground-muted, #999);
+        }
         ul.versions-list li.placeholder,
         ul.versions-list li.error {
             color: var(--color-foreground-secondary, #777);
@@ -104,10 +113,19 @@
                     var name = isObject ? entry.name : entry;
                     var display = isObject ? (entry.display || entry.name) : entry;
                     var li = document.createElement('li');
-                    var a = document.createElement('a');
-                    a.href = '/' + name + '/index.html';
-                    a.textContent = display;
-                    li.appendChild(a);
+
+                    var versionLink = document.createElement('a');
+                    versionLink.className = 'version-link';
+                    versionLink.href = '/' + name + '/index.html';
+                    versionLink.textContent = display;
+                    li.appendChild(versionLink);
+
+                    var snapshotLink = document.createElement('a');
+                    snapshotLink.className = 'snapshot-link';
+                    snapshotLink.href = '/' + name + '/reference/snapshot.html';
+                    snapshotLink.textContent = 'snapshot.yaml';
+                    li.appendChild(snapshotLink);
+
                     list.appendChild(li);
                 });
             })
