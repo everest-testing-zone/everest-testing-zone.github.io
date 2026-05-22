@@ -39,19 +39,15 @@ document.addEventListener("DOMContentLoaded", function() {
             const currentPath = window.location.pathname;
 
             // 2c Populate dropdown menu
-            // Each entry is either an object {name, display, is_release} or, for
-            // legacy versions.json files, a plain string.
-            versions.forEach(entry => {
-                const isObject = entry !== null && typeof entry === "object";
-                const name = isObject ? entry.name : entry;
-                const display = isObject ? (entry.display || entry.name) : entry;
-
+            versions.forEach(version_string => {
                 const option = document.createElement("option");
-                option.value = `${basePath}${name}/`;
-                option.textContent = display;
-
-                // Mark as selected if the current URL contains this version's directory name
-                if (currentPath.includes(`/${name}/`)) {
+                
+                // url and name
+                option.value = `${basePath}${version_string}/`; 
+                option.textContent = version_string; 
+                
+                // Mark as selected if the current URL contains this version string
+                if (currentPath.includes(`/${version_string}/`)) {
                     option.selected = true;
                 }
                 select.appendChild(option);

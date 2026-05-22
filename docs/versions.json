@@ -1,34 +1,11 @@
 {
   "versions": [
-    {
-      "name": "release_2050_02_0",
-      "display": "2050.02.0",
-      "is_release": true
-    },
-    {
-      "name": "release_2042_04_2_",
-      "display": "release_2042_04_2_",
-      "is_release": true
-    },
-    {
-      "name": "release_2032_09_2",
-      "display": "2032.09.2",
-      "is_release": true
-    },
-    {
-      "name": "docstestbuild",
-      "display": "docstestbuild",
-      "is_release": false
-    },
-    {
-      "name": "nightly",
-      "display": "nightly (main)",
-      "is_release": false
-    },
-    {
-      "name": "old-documentation-2025",
-      "display": "old-documentation-2025",
-      "is_release": false
-    }
+    "docstestbuild",
+    "latest",
+    "nightly",
+    "old-documentation-2025",
+    "release_2032_09_2",
+    "release_2042_04_2_",
+    "release_2050_02_0"
   ]
 }
