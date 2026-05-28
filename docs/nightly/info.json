@@ -1,5 +1,5 @@
 {
   "name": "nightly",
   "display": "nightly (main)",
-  "is_release": true
+  "is_release": false
 }
