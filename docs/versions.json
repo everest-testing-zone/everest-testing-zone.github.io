@@ -6,11 +6,6 @@
       "is_release": true
     },
     {
-      "name": "release_2042_04_2_",
-      "display": "release_2042_04_2_",
-      "is_release": true
-    },
-    {
       "name": "release_2032_09_2",
       "display": "2032.09.2",
       "is_release": true
@@ -19,6 +14,11 @@
       "name": "release_2026_51_0",
       "display": "2026.51.0",
       "is_release": true
+    },
+    {
+      "name": "latest",
+      "display": "latest",
+      "is_release": false
     },
     {
       "name": "nightly",
