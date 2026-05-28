@@ -21,11 +21,6 @@
       "is_release": true
     },
     {
-      "name": "docstestbuild",
-      "display": "docstestbuild",
-      "is_release": false
-    },
-    {
       "name": "old-documentation-2025",
       "display": "old-documentation-2025",
       "is_release": false
